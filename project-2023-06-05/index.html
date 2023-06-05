@@ -1,0 +1,97 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 600;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+    ctx.strokeStyle = "#ffffff";
+
+    // simple grids
+    const step = 10;
+
+    const totalRows = w / step;
+    const totalColumns = h / step;
+
+    const drawBg = () => {
+      ctx.fillStyle = "#000000"; // "#6699ee";
+      ctx.fillRect(0, 0, w, h);
+    };
+
+    const drawGrid = () => {
+      for (let i = 0; i < h; i += step) {
+        ctx.moveTo(0, i);
+        ctx.lineTo(w, i);
+      }
+
+      for (let i = 0; i < w; i += step) {
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, h);
+      }
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    };
+
+    let squares = [];
+    const maxSpeed = 5;
+    const colours = ["#E89005", "#EC7505", "#D84A05", "#F42B03", "#E70E02"];
+    const totalColours = colours.length;
+
+    const createSquare = () => {
+      const rCol = Math.floor(Math.random() * totalColumns);
+      const rSpeed = Math.floor(Math.random() * maxSpeed) + 1;
+      const rColour = colours[Math.floor(Math.random() * totalColours)];
+      squares.push({ col: rCol, row: 0, speed: rSpeed, colour: rColour });
+    };
+
+    const iterate = () => {
+      squares.forEach((square) => (square.row = square.row + square.speed));
+    };
+
+    const cull = () => {
+      squares = squares.filter((square) => square.row < totalRows);
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      drawBg();
+      // drawGrid();
+      cull();
+
+      squares.forEach((square) => {
+        ctx.fillStyle = `${square.colour}66`;
+        ctx.fillRect(
+          square.col * step,
+          square.row * step - 2*step,
+          step,
+          step
+        );
+
+        ctx.fillStyle = `${square.colour}99`;
+        ctx.fillRect(
+          square.col * step - step*0.1,
+          square.row * step - step,
+          step * 1.2,
+          step
+        );
+
+        ctx.fillStyle = square.colour;
+        ctx.fillRect(square.col * step, square.row * step, step, step);
+      });
+    };
+
+    const duration = 100;
+
+    const to = setInterval(() => {
+      iterate();
+      createSquare();
+      draw();
+    }, 500);
+  </script>
+</body>
