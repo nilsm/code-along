@@ -1,0 +1,67 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 300;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    const drawCircle = (x, y, r) => {
+      ctx.beginPath();
+      ctx.fillStyle = "#ffffff";
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fill();
+    };
+
+    const clear = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.beginPath();
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h);
+    };
+
+    const cRadius = 10;
+    let cx = cRadius;
+    let cy = h / 2;
+
+    let cDirX = Math.random() > 0.5 ? 1 : -1;
+    let cDirY = Math.random() > 0.5 ? 1 : -1;
+
+    const draw = () => {
+      drawCircle(cx, cy, cRadius);
+    };
+
+    const iterate = () => {
+      cx += cDirX * (1 + Math.floor(Math.random() * 20));
+
+      if (cx > w) {
+        cx = w - cRadius;
+        cDirX = -1;
+      } else if (cx < 0) {
+        cx = 0;
+        cDirX = 1;
+      }
+
+      cy += cDirY * (1 + Math.floor(Math.random() * 20));
+
+      if (cy > h) {
+        cy = h - cRadius;
+        cDirY = -1;
+      } else if (cy < 0) {
+        cy = 0;
+        cDirY = 1;
+      }
+    };
+
+    setInterval(() => {
+      clear();
+      draw();
+      iterate();
+    }, 16);
+  </script>
+</body>
