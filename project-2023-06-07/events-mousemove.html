@@ -1,0 +1,39 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 300;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+
+    const getColour = () => {
+      const colours = ["#ffffff", "#6E44FF", "#B892FF", "#EF7A85"];
+      const rIndex = Math.floor(Math.random() * colours.length);
+      return colours[rIndex];
+    };
+
+    // event handlers
+    el.addEventListener("mousemove", (e) => {
+      const boundingRect = el.getBoundingClientRect();
+      const localX = e.clientX - boundingRect.x;
+      const localY = e.clientY - boundingRect.y;
+
+      const radius = 5 + Math.floor(Math.random() * 200);
+
+      ctx.beginPath();
+      ctx.strokeStyle = getColour();
+      ctx.arc(localX, localY, radius, 0, 2 * Math.PI);
+      ctx.stroke();
+    });
+  </script>
+</body>
