@@ -1,0 +1,73 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 300;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    const drawBg = () => {
+      ctx.beginPath();
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h);
+    };
+
+    const drawCircle = (item) => {
+      ctx.beginPath();
+      ctx.strokeStyle = item.colour;
+      ctx.arc(item.x, item.y, item.radius, 0, 2 * Math.PI);
+      ctx.stroke();
+    };
+
+    const createCircle = (useRandomX = true) => {
+      const combinations = [
+        { radius: 5, colour: "#666666" },
+        { radius: 10, colour: "#999999" },
+        { radius: 15, colour: "#cccccc" },
+        { radius: 20, colour: "#ffffff" },
+      ];
+      const randomIndex = Math.floor(Math.random() * combinations.length);
+      const randomCombination = combinations[randomIndex];
+
+      return {
+        x: useRandomX ? Math.floor(Math.random() * w) : 0,
+        y: Math.floor(Math.random() * h),
+        radius: randomCombination.radius,
+        colour: randomCombination.colour,
+        speed: 2 + Math.floor(Math.random() * 7),
+      };
+    };
+
+    let circles = [];
+
+    for (let i = 0; i < 300; i++) {
+      circles.push(createCircle());
+    }
+
+    const iterate = () => {
+      circles.forEach((c) => (c.x += c.speed));
+    };
+
+    const cull = () => {
+      const oldLength = circles.length;
+      circles = circles.filter((c) => c.x < w);
+
+      while (circles.length < oldLength) {
+        circles.push(createCircle(false));
+      }
+    };
+
+    setInterval(() => {
+      ctx.clearRect(0, 0, w, h);
+      drawBg();
+      circles.forEach(drawCircle);
+      iterate();
+      cull();
+    }, 1000 / 30);
+  </script>
+</body>
