@@ -1,0 +1,54 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 300;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+
+    const radius = 30 + Math.floor(Math.random() * 70);
+
+    const colours = [
+      "#ffffff",
+      "#ff0000",
+      "#00ff00",
+      "#0000ff",
+      "#ff00ff",
+      "#00ffff",
+      "#ffff00",
+    ];
+
+    const randomIndex = Math.floor(Math.random() * colours.length);
+    const randomColour = colours[randomIndex];
+
+    const goLeft = Math.random() < 0.5;
+    const circleX = goLeft ? w / 3 : (w * 2) / 3;
+
+    let circleY = h / 3;
+
+    if (Math.random() < 0.9) {
+      circleY = (h * 2) / 3;
+    }
+
+    ctx.beginPath();
+    ctx.strokeStyle = randomColour;
+    ctx.arc(circleX, circleY, radius, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    const r = 100 * Math.random();
+    const roundedDown = Math.floor(r);
+    const roundedUp = Math.ceil(r);
+    const rounded = Math.round(r);
+
+    console.log(r, roundedDown, roundedUp, rounded);
+  </script>
+</body>
