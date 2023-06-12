@@ -1,0 +1,107 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 600;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const radius = 30;
+    const pettleLength = 5 * radius;
+    const pettleHalfLength = pettleLength / 2;
+    const pettleControlWidth = 4 * radius;
+
+    // pettle going up
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(
+      cx - pettleControlWidth,
+      cy - pettleHalfLength,
+      cx,
+      cy - pettleLength
+    );
+    ctx.quadraticCurveTo(
+      cx + pettleControlWidth,
+      cy - pettleHalfLength,
+      cx,
+      cy
+    );
+
+    ctx.fillStyle = "#ffff00";
+    ctx.fill();
+
+    // pettle going down
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(
+      cx - pettleControlWidth,
+      cy + pettleHalfLength,
+      cx,
+      cy + pettleLength
+    );
+    ctx.quadraticCurveTo(
+      cx + pettleControlWidth,
+      cy + pettleHalfLength,
+      cx,
+      cy
+    );
+
+    ctx.fillStyle = "#00ffff";
+    ctx.fill();
+
+    // pettle going right
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(
+      cx + pettleHalfLength,
+      cy - pettleControlWidth,
+      cx + pettleLength,
+      cy
+    );
+    ctx.quadraticCurveTo(
+      cx + pettleHalfLength,
+      cy + pettleControlWidth,
+      cx,
+      cy
+    );
+
+    ctx.fillStyle = "#ff00ff";
+    ctx.fill();
+
+    // pettle going left
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(
+      cx - pettleHalfLength,
+      cy - pettleControlWidth,
+      cx - pettleLength,
+      cy
+    );
+    ctx.quadraticCurveTo(
+      cx - pettleHalfLength,
+      cy + pettleControlWidth,
+      cx,
+      cy
+    );
+
+    ctx.fillStyle = "#00ff00";
+    ctx.fill();
+
+    // center circle
+    ctx.beginPath();
+    ctx.fillStyle = "#ff0000";
+    ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+    ctx.fill();
+  </script>
+</body>
