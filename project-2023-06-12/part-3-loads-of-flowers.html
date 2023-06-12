@@ -1,0 +1,132 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 600;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w / 2;
+    const cy = h / 2;
+
+    const shuffleArray = (input) => {
+      const output = [];
+      while (input.length > 0) {
+        const randomIndex = Math.floor(Math.random() * input.length);
+        output.push(input[randomIndex]);
+        input.splice(randomIndex, 1);
+      }
+      return output;
+    };
+
+    const drawFlower = (fx, fy, radius = 30) => {
+      const pettleLength = 3 * radius;
+      const pettleHalfLength = pettleLength / 2;
+      const pettleControlWidth = 2 * radius;
+
+      const pettleColours = shuffleArray([
+        "#ffff00",
+        "#00ffff",
+        "#ff00ff",
+        "#00ff00",
+      ]);
+
+      // pettle going up
+      ctx.beginPath();
+      ctx.moveTo(fx, fy);
+      ctx.quadraticCurveTo(
+        fx - pettleControlWidth,
+        fy - pettleHalfLength,
+        fx,
+        fy - pettleLength
+      );
+      ctx.quadraticCurveTo(
+        fx + pettleControlWidth,
+        fy - pettleHalfLength,
+        fx,
+        fy
+      );
+
+      ctx.fillStyle = pettleColours[0];
+      ctx.fill();
+
+      // pettle going down
+      ctx.beginPath();
+      ctx.moveTo(fx, fy);
+      ctx.quadraticCurveTo(
+        fx - pettleControlWidth,
+        fy + pettleHalfLength,
+        fx,
+        fy + pettleLength
+      );
+      ctx.quadraticCurveTo(
+        fx + pettleControlWidth,
+        fy + pettleHalfLength,
+        fx,
+        fy
+      );
+
+      ctx.fillStyle = pettleColours[1];
+      ctx.fill();
+
+      // pettle going right
+      ctx.beginPath();
+      ctx.moveTo(fx, fy);
+      ctx.quadraticCurveTo(
+        fx + pettleHalfLength,
+        fy - pettleControlWidth,
+        fx + pettleLength,
+        fy
+      );
+      ctx.quadraticCurveTo(
+        fx + pettleHalfLength,
+        fy + pettleControlWidth,
+        fx,
+        fy
+      );
+
+      ctx.fillStyle = pettleColours[2];
+      ctx.fill();
+
+      // pettle going left
+      ctx.beginPath();
+      ctx.moveTo(fx, fy);
+      ctx.quadraticCurveTo(
+        fx - pettleHalfLength,
+        fy - pettleControlWidth,
+        fx - pettleLength,
+        fy
+      );
+      ctx.quadraticCurveTo(
+        fx - pettleHalfLength,
+        fy + pettleControlWidth,
+        fx,
+        fy
+      );
+
+      ctx.fillStyle = pettleColours[3];
+      ctx.fill();
+
+      // center circle
+      ctx.beginPath();
+      ctx.fillStyle = "#ff0000";
+      ctx.arc(fx, fy, radius, 0, 2 * Math.PI);
+      ctx.fill();
+    };
+
+    drawFlower(w / 2, h / 2, 20);
+    drawFlower(w / 4, h / 4);
+    drawFlower((3 * w) / 4, (3 * h) / 4, 70);
+    drawFlower((3 * w) / 4, h / 4, 10);
+    drawFlower(w / 4, (3 * h) / 4, 70);
+  </script>
+</body>
