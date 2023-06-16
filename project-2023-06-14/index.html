@@ -1,0 +1,64 @@
+<body>
+  <canvas id="cv"></canvas>
+  <script>
+    const el = document.getElementById("cv");
+
+    const w = 600;
+    const h = 600;
+
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = el.getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    const edge = 300;
+    const rows = h / edge;
+    const cols = w / edge;
+
+    const getRandomColour = (base = "#ffffff") => {
+      if (base.charAt(0) != "#") {
+        base = `#${base}`;
+      }
+      const colours = [`${base}aa`, `${base}55`, `${base}33`, `${base}11`];
+      return colours[Math.floor(Math.random() * colours.length)];
+    };
+
+    const drawLine = (x0, y0, x1, y1) => {
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x1, y1);
+    };
+
+    const drawSquare = (x, y, length) => {
+      ctx.beginPath();
+      drawLine(x, y, x + length, y);
+      drawLine(x + length, y, x + length, y + length);
+      drawLine(x + length, y + length, x, y + length);
+      drawLine(x, y + length, x, y);
+      ctx.fillStyle = "#ff0000";
+      ctx.fill();
+      ctx.strokeStyle = "#000000";
+      ctx.stroke();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.beginPath();
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h);
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          ctx.beginPath();
+          ctx.fillStyle = getRandomColour("#ff0000");
+          drawSquare(c * edge, r * edge, edge);
+          ctx.fill();
+        }
+      }
+    };
+
+    // draw();
+    // setInterval(draw, 1200);
+
+    drawSquare(100, 100, 100);
+  </script>
+</body>
