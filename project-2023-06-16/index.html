@@ -1,0 +1,146 @@
+<html>
+  <head>
+    <style>
+      button {
+        font-size: 24px;
+      }
+
+      button.big {
+        width: 300px;
+        height: 300px;
+        font-size: 24px;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+    <script>
+      const MAX_CLICKS = 10;
+      let times = [];
+      let clicks = 0;
+      let finished = false;
+      let defaultGameButtonText = "";
+      let lastTotalTime = -1;
+
+      function hideEl(el) {
+        el.classList.add("hidden");
+      }
+
+      function showEl(el) {
+        el.classList.remove("hidden");
+      }
+
+      function getGameButtonEl() {
+        return document.getElementById("btn");
+      }
+
+      function hideGameButton() {
+        hideEl(getGameButtonEl());
+      }
+
+      function showGameButton() {
+        showEl(getGameButtonEl());
+      }
+
+      function getRestartButtonEl() {
+        return document.getElementById("restart");
+      }
+
+      function hideRestartButton() {
+        hideEl(getRestartButtonEl());
+      }
+
+      function showRestartButton() {
+        showEl(getRestartButtonEl());
+      }
+
+      function updateGameButtonText() {
+        if (clicks == 0) {
+          setButtonText(defaultGameButtonText);
+          return;
+        }
+
+        const remaining = MAX_CLICKS - clicks;
+        setButtonText(`${remaining} more`);
+      }
+
+      function setButtonText(value) {
+        getGameButtonEl().innerText = value;
+      }
+
+      function resetGame() {
+        setButtonText(defaultGameButtonText);
+        times = [];
+        clicks = 0;
+      }
+
+      function getChangeText(newTotalTime) {
+        // first time - show 'Well Done!'
+        // next time - show 'BETTER', 'WORSE', 'SAME' depending on change amount
+        if (lastTotalTime === -1) {
+          return "Well Done";
+        }
+
+        if (newTotalTime === lastTotalTime) {
+          return "SAME";
+        }
+
+        if (newTotalTime < lastTotalTime) {
+          return "BETTER";
+        }
+
+        return "WORSE";
+      }
+
+      function showResults() {
+        const totalTime = (times[times.length - 1] - times[0]) / 1000;
+        const displayText = `total time: ${totalTime}s. ${getChangeText(
+          totalTime
+        )}`;
+
+        lastTotalTime = totalTime;
+
+        document.getElementById("output").innerHTML += `${displayText}<br>`;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Let's Play A Game!</h1>
+    <p id="output"></p>
+    <p>
+      <button id="btn" class="big">
+        Click me 10 times as quickly as you can
+      </button>
+    </p>
+    <button id="restart" class="hidden">Play again</button>
+
+    <script>
+      const gameBtn = getGameButtonEl();
+
+      defaultGameButtonText = gameBtn.innerText;
+
+      gameBtn.addEventListener("click", () => {
+        times.push(new Date().getTime());
+        finished = ++clicks === MAX_CLICKS;
+
+        if (finished) {
+          hideGameButton();
+          showResults();
+
+          setTimeout(showRestartButton, 2000);
+          return;
+        }
+
+        updateGameButtonText();
+      });
+
+      getRestartButtonEl().addEventListener("click", () => {
+        resetGame();
+        hideRestartButton();
+
+        setTimeout(showGameButton, 1000);
+      });
+    </script>
+  </body>
+</html>

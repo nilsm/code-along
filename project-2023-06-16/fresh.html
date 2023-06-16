@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <style>
+      button {
+        font-size: 24px;
+        display: block;
+      }
+      button.big {
+        width: 300px;
+        height: 300px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Let's play a game!</h1>
+    <p id="output"></p>
+    <button class="big" id="gameButton">
+      Click me 10 times as fast as you can.
+    </button>
+    <button id="restartButton" class="hidden">Play Again</button>
+
+    <script>
+      const MAX_CLICKS = 10;
+      let clicks = 0;
+      let startTime = 0;
+      let previousTime = -1;
+
+      function show(el) {
+        el.classList.remove("hidden");
+      }
+
+      function hide(el) {
+        el.classList.add("hidden");
+      }
+
+      function getGameButton() {
+        return document.getElementById("gameButton");
+      }
+
+      function showGameButton() {
+        show(getGameButton());
+      }
+
+      function hideGameButton() {
+        hide(getGameButton());
+      }
+
+      function getRestartButton() {
+        return document.getElementById("restartButton");
+      }
+
+      function showRestartButton() {
+        show(getRestartButton());
+      }
+
+      function hideRestartButton() {
+        hide(getRestartButton());
+      }
+
+      function updateGameButtonText() {
+        const buttonText =
+          clicks === 0
+            ? `Click me ${MAX_CLICKS} times as fast as you can.`
+            : `${MAX_CLICKS - clicks} more`;
+        getGameButton().innerText = buttonText;
+      }
+
+      function resetGame() {
+        clicks = 0;
+        updateGameButtonText();
+      }
+
+      function getChangeText(totalSeconds) {
+        if(previousTime === -1) {
+            return 'Well Done!';
+        }
+
+        if(totalSeconds < previousTime) {
+            return 'BETTER';
+        }
+
+        if(totalSeconds > previousTime) {
+            return 'WORSE';
+        }
+
+        return 'SAME';
+      }
+
+      function showResults(totalSeconds) {
+        document.getElementById(
+          "output"
+        ).innerHTML += `result: ${totalSeconds}s ${getChangeText(totalSeconds)}<br>`;
+      }
+
+      getGameButton().addEventListener("click", function () {
+        if (clicks == 0) {
+          startTime = new Date().getTime();
+        }
+
+        clicks++;
+
+        const hasFinished = clicks === MAX_CLICKS;
+
+        if (hasFinished) {
+          const timeNow = new Date().getTime();
+          const totalSeconds = (timeNow - startTime) / 1000;
+          hideGameButton();
+          showResults(totalSeconds);
+
+          setTimeout(showRestartButton, 1000);
+
+          previousTime = totalSeconds;
+          return;
+        }
+        // show results
+
+        updateGameButtonText();
+      });
+
+      getRestartButton().addEventListener("click", function () {
+        hideRestartButton();
+        resetGame();
+        setTimeout(showGameButton, 1000);
+      });
+    </script>
+  </body>
+</html>
